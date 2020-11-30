@@ -13,4 +13,6 @@ if __name__ == "__main__":
             print("prompt>", end=" ")
             command = input()
             util.send(s, command)
+            if command.strip() == "exit":
+                break
             print(util.recv(s))
