@@ -17,9 +17,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_serv:
         while True:
             command = util.recv(sock)
             command = command.strip().split(" ")
+            command = list(filter(lambda v: v, command))
             toret = ""
             if command[0] == "ls":
-                toret = commands.ls(BASEPATH)
+                long = False
+                if "-l" in command:
+                    long  = True
+                toret = commands.ls(BASEPATH, long)
             elif command[0] == "exit":
                 break
             util.send(sock, toret)

@@ -1,5 +1,7 @@
+import hashlib
+import mimetypes
+import os
 import struct
-
 
 HEADER_SIZE = struct.calcsize('l')
 
@@ -16,3 +18,11 @@ def recv(sock):
      data = sock.recv(s_len)
      s, = struct.unpack(f"{s_len}s", data)
      return s.decode("utf-8")
+
+
+def file_details(filepath):
+     return {
+          "mtime": os.path.getmtime(filepath),
+          "size": os.path.getsize(filepath),
+          "type": mimetypes.guess_type(filepath)[0] or "unknown"
+     }

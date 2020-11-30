@@ -1,8 +1,18 @@
 import os
+import time
+import util
 
 # Support ls, ls -l
 def ls(base_dir, long=False):
     toret = ""
-    dirs = os.listdir(base_dir)
-    toret += "\n".join(dirs)
-    return toret
+    files = os.listdir(base_dir)
+    if not long:
+        toret += "\n".join(files)
+    else:
+        for f in files:
+            details = util.file_details(os.path.join(base_dir, f))
+            details["mtime"] = time.strftime(
+                "%Y-%m-%d %H:%M:%S", time.gmtime(details["mtime"])
+            )
+            toret += f"{f}\t{details['size']}\t{details['mtime']}\t{details['type']}\n"
+    return toret.strip()
