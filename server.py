@@ -28,14 +28,17 @@ def main(socket_serv):
         print("Connected by", addr)
         while True:
             command = util.recv(sock)
-            command = command.strip().split(" ")
-            command = list(filter(lambda v: v, command))
-            toret = "Invalid command!"
+            command = util.split_command(command)
             if command[0] == "exit":
                 break
+            elif command[0] == "download":
+                filename = command[1]
+                util.send(sock, str(commands.num_chunks(BASEPATH, filename)))
+                for data in commands.download(BASEPATH, filename):
+                    util.send_bytes(sock, data)
             else:
-                toret = execute_command(command)
-            util.send(sock, toret)
+                toret = execute_command(command) or "Invalid command!"
+                util.send(sock, toret)
     finally:
         sock.close()
 
