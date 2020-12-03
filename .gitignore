@@ -145,3 +145,7 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 client_dir/*
+!client_dir/kitten.jpg
+test_dir/*
+!test_dir/test1.txt
+!test_dir/test2.jpg
