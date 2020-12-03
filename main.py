@@ -2,6 +2,8 @@
 
 import os
 import socket
+
+import commands
 import util
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
@@ -27,7 +29,12 @@ if __name__ == "__main__":
                     with open(os.path.join(CLIENT_DIR, filename), 'wb') as f:
                         for i in range(num_chunks):
                             print(f"Received chunk {i} of {num_chunks}")
-                            f.write(util.recv_bytes(s))
+                            f.write(util.recv_bytes(sock))
+                elif command_split[0] == "upload":
+                    filename = command_split[1]
+                    util.send(s, str(commands.num_chunks(CLIENT_DIR, filename)))
+                    for data in commands.download(CLIENT_DIR, filename):
+                        util.send_bytes(s, data)
                 else:
                     print(util.recv(s))
         except:

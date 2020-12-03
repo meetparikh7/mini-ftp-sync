@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
+import os
 import socket
+
 import commands
 import util
 
@@ -36,6 +38,13 @@ def main(socket_serv):
                 util.send(sock, str(commands.num_chunks(BASEPATH, filename)))
                 for data in commands.download(BASEPATH, filename):
                     util.send_bytes(sock, data)
+            elif command[0] == "upload":
+                num_chunks = int(util.recv(sock))
+                filename = command[1]
+                with open(os.path.join(BASEPATH, filename), 'wb') as f:
+                    for i in range(num_chunks):
+                        print(f"Received chunk {i} of {num_chunks}")
+                        f.write(util.recv_bytes(sock))
             else:
                 toret = execute_command(command) or "Invalid command!"
                 util.send(sock, toret)
