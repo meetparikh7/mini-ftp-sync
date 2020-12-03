@@ -1,3 +1,4 @@
+import json
 import math
 import os
 import time
@@ -5,18 +6,19 @@ import util
 
 # Support ls, ls -l
 def ls(base_dir, long=False):
-    toret = ""
+    toret = []
     files = os.listdir(base_dir)
     if not long:
-        toret += "\n".join(files)
+        toret = files
     else:
         for f in files:
             details = util.file_details(os.path.join(base_dir, f))
-            details["mtime"] = time.strftime(
-                "%Y-%m-%d %H:%M:%S", time.gmtime(details["mtime"])
-            )
-            toret += f"{f}\t{details['size']}\t{details['mtime']}\t{details['type']}\n"
-    return toret.strip()
+            # details["mtime"] = time.strftime(
+            #     "%Y-%m-%d %H:%M:%S", time.gmtime(details["mtime"])
+            # )
+            details["name"] = f
+            toret.append(details)
+    return json.dumps(toret)
 
 
 def hashfile(base_dir, filename):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import os
 import socket
 
@@ -23,6 +24,13 @@ if __name__ == "__main__":
                 util.send(s, command)
                 if command.strip() == "exit":
                     break
+                elif command_split[0] == "ls":
+                    data = util.recv(s)
+                    data = json.loads(data)
+                    if "-l" in command_split:
+                        print(util.format_table(("name", "type", "size"), data))
+                    else:
+                        print("\n".join(data))
                 elif command_split[0] == "download":
                     num_chunks = int(util.recv(s))
                     filename = command_split[1]

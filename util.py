@@ -48,3 +48,15 @@ def split_command(command):
      command = command.strip().split(" ")
      command = list(filter(lambda v: v, command))
      return command
+
+
+def format_table(columns, data):
+     s = ""
+     for c in columns:
+          s += c + "\t\t"
+     s += "\n" + ("-" * 2 * len(s)) + "\n"
+     for row in data:
+          for c in columns:
+               s += str(row[c]) + "\t"
+          s += "\n"
+     return s
