@@ -16,3 +16,10 @@ def ls(base_dir, long=False):
             )
             toret += f"{f}\t{details['size']}\t{details['mtime']}\t{details['type']}\n"
     return toret.strip()
+
+
+def hashfile(base_dir, filename):
+    toret = ""
+    filename = os.path.join(base_dir, filename)
+    print(util.hashfile(filename))
+    return util.hashfile(filename)

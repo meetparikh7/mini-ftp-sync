@@ -24,6 +24,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_serv:
                 if "-l" in command:
                     long  = True
                 toret = commands.ls(BASEPATH, long)
+            elif command[0] == "hash":
+                toret = commands.hashfile(BASEPATH, command[1])
             elif command[0] == "exit":
                 break
             util.send(sock, toret)
