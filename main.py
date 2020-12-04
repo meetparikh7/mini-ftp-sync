@@ -7,6 +7,7 @@ import socket
 import commands
 import file_transfer
 import util
+from Syncer import Syncer
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65431        # The port used by the server
@@ -14,6 +15,7 @@ CLIENT_DIR = "client_dir"
 
 
 if __name__ == "__main__":
+    syncer = Syncer(CLIENT_DIR)
     os.makedirs("client_dir", exist_ok=True)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
@@ -38,6 +40,8 @@ if __name__ == "__main__":
                 elif command_split[0] == "upload":
                     filename = command_split[1]
                     file_transfer.upload_file(s, CLIENT_DIR, filename)
+                elif command_split[0] == "sync":
+                    syncer.sync(s)
                 else:
                     print(util.recv(s))
         except:

@@ -40,6 +40,8 @@ def main(socket_serv):
             elif command[0] == "upload":
                 filename = command[1]
                 file_transfer.download_file(sock, BASEPATH, filename)
+            elif command[0] == "sync":
+                pass
             else:
                 toret = execute_command(command) or "Invalid command!"
                 util.send(sock, toret)
