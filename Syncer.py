@@ -42,11 +42,14 @@ class Syncer:
             local_hsh = util.hashfile(os.path.join(self.basedir, file['name']))
             if hsh != local_hsh: # IMPORTANT LOGIC
                 local_file = [f for f in client_data if f.get('name')== f['name']][0]
-                if file['mtime'] > self.last_synced[file['name']]:
-                    # server is always right
+                if file['mtime'] > local_file['mtime']:
+                    # server updated file after client
                     cue_download.append(file['name'])
                 else:
+                    # client updated dile after server
                     cue_upload.append(file['name'])
+            else: # mtime differs but file is in sync as compared by hash
+                self.last_synced[file['name']] = time.time()
         for filename in cue_upload:
             util.send(sock, f"upload {filename}")
             file_transfer.upload_file(sock, self.basedir, filename)
